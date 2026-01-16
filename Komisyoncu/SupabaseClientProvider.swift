@@ -28,7 +28,8 @@ enum AppConfig {
         return key
     }
     
-    enum SupabaseProvider {
-        static let client = SupabaseClient(supabaseURL: AppConfig.supabaseURL, supabaseKey: AppConfig.supabaseAnonKey)
-    }
+}
+
+enum SupabaseProvider {
+    static let client = SupabaseClient(supabaseURL: AppConfig.supabaseURL, supabaseKey: AppConfig.supabaseAnonKey)
 }
