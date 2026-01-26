@@ -19,6 +19,18 @@ final class AuthViewModel: ObservableObject {
     @Published var errorMessage: String?
     
     private var authService = AuthService()
+    private(set) var currentUserId: UUID?
+    
+    init(service: AuthService = AuthService()){
+        self.authService = service // Test için
+    }
+    
+    var isSignInFormValid: Bool {
+        ValidationHelper.isValidEmail(email) && !password.isEmpty
+    }
+    var isSignUpFormValid: Bool {
+        ValidationHelper.isValidEmail(email) &&  ValidationHelper.isValidPassword(password)
+    }
     
     func checkAuthStatus(delay: UInt64) async {
         async let minDelay: Void = {
@@ -28,6 +40,7 @@ final class AuthViewModel: ObservableObject {
         
         do {
             let session = try await authService.getCurrentSession()
+            currentUserId = session.user.id
             let hasProfile = try await authService.checkProfileExists(userId: session.user.id)
             await (minDelay)
             authState = .authenticated(needsProfile: !hasProfile)
@@ -38,6 +51,12 @@ final class AuthViewModel: ObservableObject {
     }
     
     func signUp() async {
+        
+        if !isSignInFormValid {
+            errorMessage = "Please fill in all fields correctly"
+            return
+        }
+        
         isLoading = true
         errorMessage = nil
         
@@ -57,6 +76,10 @@ final class AuthViewModel: ObservableObject {
 
     
     func signIn() async {
+        if !isSignInFormValid {
+            errorMessage = "Please fill in all fields correctly"
+            return
+        }
         isLoading = true
         errorMessage = nil
         
@@ -66,6 +89,7 @@ final class AuthViewModel: ObservableObject {
             //Giriş kontrolü + profil kayıt kontrolü
             
             let session = try await authService.signIn(email: email, password: password)
+            currentUserId = session.user.id
             let hasProfile = try await authService.checkProfileExists(userId: session.user.id)
             
             authState = .authenticated(needsProfile: !hasProfile)
@@ -96,12 +120,17 @@ final class AuthViewModel: ObservableObject {
         
         do {
             try await authService.signOut()
+            currentUserId = nil
             authState = .unauthenticated
             email = ""
             password = ""
         } catch  {
             errorMessage = error.localizedDescription
         }
+    }
+    
+    func profileCompleted() async {
+        authState = .authenticated(needsProfile: false)
     }
 }
 

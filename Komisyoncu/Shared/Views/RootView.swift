@@ -20,19 +20,21 @@ struct RootView: View {
             switch auth.authState {
             case .splash:
                 SplashView()
-                    .environmentObject(auth)
+                
             case .unauthenticated:
                 AuthView()
-                    .environmentObject(auth)
+                
             case .authenticated(let needsProfile):
                 if needsProfile {
-                    CompleteProfileView()
-                        .environmentObject(auth)
+                    if let userId = auth.currentUserId {
+                        CompleteProfileView(userId: userId)
+                    }else {
+                        AuthView()
+                    }
                 }else {
                     MainView()
-                        .environmentObject(auth)
                 }
             }
-        }
+        }.environmentObject(auth)
     }
 }

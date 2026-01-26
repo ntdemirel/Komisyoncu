@@ -150,7 +150,7 @@
 		631F6A0A2F1641AA005A26E3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = 631F6A032F1641A9005A26E3 /* Komisyoncu */;
-			baseConfigurationReferenceRelativePath = Secrets.xcconfig;
+			baseConfigurationReferenceRelativePath = Core/Network/Secrets.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -216,7 +216,7 @@
 		631F6A0B2F1641AA005A26E3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = 631F6A032F1641A9005A26E3 /* Komisyoncu */;
-			baseConfigurationReferenceRelativePath = Secrets.xcconfig;
+			baseConfigurationReferenceRelativePath = Core/Network/Secrets.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -275,7 +275,7 @@
 		631F6A0D2F1641AA005A26E3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = 631F6A032F1641A9005A26E3 /* Komisyoncu */;
-			baseConfigurationReferenceRelativePath = Secrets.xcconfig;
+			baseConfigurationReferenceRelativePath = Core/Network/Secrets.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -306,7 +306,7 @@
 		631F6A0E2F1641AA005A26E3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = 631F6A032F1641A9005A26E3 /* Komisyoncu */;
-			baseConfigurationReferenceRelativePath = Secrets.xcconfig;
+			baseConfigurationReferenceRelativePath = Core/Network/Secrets.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
