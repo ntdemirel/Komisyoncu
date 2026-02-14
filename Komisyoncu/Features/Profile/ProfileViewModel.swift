@@ -32,24 +32,24 @@ class ProfileViewModel: ObservableObject{
     var isFormValid: Bool {
         !companyName.trimmingCharacters(in: .whitespaces).isEmpty && !fullName.trimmingCharacters(in: .whitespaces).isEmpty
     }
-    func upsertProfile() async -> ProfileModel?{
+    
+    func upsertProfile() async -> Profile?{
         
         isLoading = true
         errorMessage = nil
         
         defer {isLoading = false }
         
-        let profileModel = ProfileModel(
+        let profile = Profile(
             id: userId,
             companyName: companyName,
-            phone: phone,
             fullName: fullName,
-            createdAt: nil
+            phone: phone.isEmpty ? nil : phone
         )
         
         do {
-            try await profileService.upsertProfile(profileModel: profileModel)
-            return profileModel
+            try await profileService.upsertProfile(profile: profile)
+            return profile
         } catch {
             print(error.localizedDescription)
             errorMessage = "Someting went wrong. Please try again later."
@@ -61,10 +61,3 @@ class ProfileViewModel: ObservableObject{
     
 }
 
-struct ProfileModel: Identifiable {
-    let id: UUID
-    var companyName: String
-    var phone: String
-    var fullName: String
-    var createdAt: Date?
-}

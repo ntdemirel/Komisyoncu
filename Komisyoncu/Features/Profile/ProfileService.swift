@@ -10,18 +10,13 @@ import Foundation
 class ProfileService {
     
     
-    func upsertProfile(profileModel: ProfileModel) async throws{
+    func upsertProfile(profile: Profile) async throws{
         
-        let profile = ProfileUpsert(
-            id: profileModel.id,
-            company_name: profileModel.companyName,
-            phone: profileModel.phone,
-            full_name: profileModel.fullName)
+        let profileRequest = profile.toRequest()
         
         try await SupabaseProvider.client
             .from("profiles")
-            .upsert(profile)
+            .upsert(profileRequest)
             .execute()
-        
     }
 }

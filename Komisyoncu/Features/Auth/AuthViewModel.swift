@@ -52,7 +52,7 @@ final class AuthViewModel: ObservableObject {
     
     func signUp() async {
         
-        if !isSignInFormValid {
+        if !isSignUpFormValid {
             errorMessage = "Please fill in all fields correctly"
             return
         }
