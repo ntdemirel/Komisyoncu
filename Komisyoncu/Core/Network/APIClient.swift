@@ -59,6 +59,8 @@ class APIClient {
         }
         return decoder
     }()
+    
+    private let encoder = JSONEncoder()
 
     
     private func makeRequest(endpoint: String, method: String, body: Data? = nil, returnResult: Bool = false) async throws -> URLRequest {
