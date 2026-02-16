@@ -14,7 +14,12 @@ class CustomerListViewModel: ObservableObject {
         case active = "Active"
         case archived = "Archived"
     }
-    @Published var selectedSegment: Segment = .active
+    
+    @Published var selectedSegment: Segment = .active {
+        didSet{
+            segmentChanged()
+        }
+    }
     @Published var activeCustomers: [Customer] = []
     @Published var archivedCustomers: [Customer] = []
     @Published var searchResults: [Customer] = []
@@ -222,6 +227,21 @@ class CustomerListViewModel: ObservableObject {
         
         //Normal
         await fetchCustomers()
+    }
+    
+    func segmentChanged() {
+        //Segment değiştiğinde search filtresi segmente göre yeniden uyglanmalı
+        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !query.isEmpty else { return }
+        
+        searchTask?.cancel()
+        loadMoreTask?.cancel()
+        
+        // Segment değiştiğinde eski segmentdeki search sonuçları hemen silinsin.
+        searchResults = []
+
+        
+        searchTask = Task { await performSearch(query: query) }
     }
     
     
