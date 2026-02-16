@@ -35,14 +35,31 @@ class APIClient {
     // DB için date decode ve encode ayarı
     private let decoder =  {
         let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
+        
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        
+        decoder.dateDecodingStrategy = .custom { decoder in
+            let container = try decoder.singleValueContainer()
+            let dateString = try container.decode(String.self)
+            
+            if let date = formatter.date(from: dateString) {
+                return date
+            }
+            
+            formatter.formatOptions = [.withInternetDateTime]
+            if let date = formatter.date(from: dateString) {
+                return date
+            }
+            
+            throw DecodingError.dataCorruptedError(
+                in: container,
+                debugDescription: "Invalid date: \(dateString)"
+            )
+        }
         return decoder
     }()
-    private let encoder = {
-        let encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = .iso8601
-        return encoder
-    }()
+
     
     private func makeRequest(endpoint: String, method: String, body: Data? = nil, returnResult: Bool = false) async throws -> URLRequest {
         
@@ -126,7 +143,7 @@ class APIClient {
         
         let bodyData = try encoder.encode(body)
         
-        var request = try await makeRequest(endpoint: endpoint, method: "PATCH")
+        var request = try await makeRequest(endpoint: endpoint, method: "PATCH", body: bodyData)
         
         let (data , response) = try await URLSession.shared.data(for: request)
         

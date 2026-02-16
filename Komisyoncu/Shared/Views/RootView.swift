@@ -32,7 +32,7 @@ struct RootView: View {
                         AuthView()
                     }
                 }else {
-                    MainView()
+                    CustomerListView()
                 }
             }
         }.environmentObject(auth)

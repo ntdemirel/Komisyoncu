@@ -152,6 +152,8 @@ class CustomerListViewModel: ObservableObject {
     private func loadMoreSearchResults() async {
         loadMoreTask?.cancel()
         
+        //Verilein devamı gelirken search text değişirse ve loadMore'dan önce cevap gelirse loadMore yeni filtrelenmiş veri üzerine append yapar.
+        //Cancel için Task kullanıyoruz.
         loadMoreTask = Task {
             isLoadingMore = true
             defer {isLoadingMore = false}

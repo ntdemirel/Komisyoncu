@@ -26,7 +26,7 @@ class CustomerService {
     
     // Müşterilerileri Getir (Pagination)
     func fetchCustomers ( isArchived: Bool = false, limit: Int = defaultPageSize, offset: Int = 0) async throws -> [Customer] {
-        let endpoint = "/customers?is_archived=eq.\(isArchived)&order=name.asc&limit=\(limit)&offset=\(offset)"
+        let endpoint = "/customers?is_archived=eq.\(isArchived)&order=company_name.asc&limit=\(limit)&offset=\(offset)"
         let responses : [CustomerResponse] = try await api.get(endpoint: endpoint )
         return responses.map{Customer(from: $0)}
     }
@@ -38,7 +38,7 @@ class CustomerService {
         
         guard let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {return []}
         
-        let endpoint = "/customers?is_archived=eq.\(isArchived)&or=(company_name.ilike.*\(encodedQuery)*,contact_person.ilike.*\(encodedQuery)*,email.ilike.*\(encodedQuery)*)&order=name.asc&limit=\(limit)&offset=\(offset)"
+        let endpoint = "/customers?is_archived=eq.\(isArchived)&or=(company_name.ilike.*\(encodedQuery)*,contact_name.ilike.*\(encodedQuery)*,email.ilike.*\(encodedQuery)*)&order=company_name.asc&limit=\(limit)&offset=\(offset)"
         
         let responses: [CustomerResponse] = try await api.get(endpoint: endpoint)
         return responses.map {Customer(from: $0)}
