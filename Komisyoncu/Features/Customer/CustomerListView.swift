@@ -7,15 +7,10 @@
 
 import SwiftUI
 
-
 struct CustomerListView: View {
-    @StateObject private var vm: CustomerListViewModel
+    @StateObject private var vm: CustomerListViewModel = CustomerListViewModel()
 
-    init(service: CustomerService = CustomerService()) {
-        _vm = StateObject(wrappedValue: CustomerListViewModel(service: service))
-    }
 
-    
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
@@ -102,13 +97,13 @@ private extension CustomerListView {
                     .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                         if vm.selectedSegment == .active {
                             Button(role: .destructive) {
-                                Task { await vm.archiveCustomer(customer) }
+                                Task { await vm.toggleArchive(customer) }
                             } label: {
                                 Label("Archive", systemImage: "archivebox")
                             }
                         } else {
                             Button {
-                                Task { await vm.unarchiveCustomer(customer) }
+                                Task { await vm.toggleArchive(customer) }
                             } label: {
                                 Label("Unarchive", systemImage: "arrow.uturn.left")
                             }
@@ -173,7 +168,6 @@ private struct CustomerRow: View {
         .padding(.vertical, 6)
     }
 }
-
 #Preview {
     CustomerListView()
 }

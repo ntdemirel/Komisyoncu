@@ -249,6 +249,8 @@ class CustomerListViewModel: ObservableObject {
     
     //MARK: - Archive Actions
     
+    
+    
     func archiveCustomer(_ customer: Customer) async {
         do {
             try await service.archiveCustomer(id: customer.id)
@@ -277,6 +279,40 @@ class CustomerListViewModel: ObservableObject {
         }catch {
             errorMessage = "Failed to unarchive customer"
             print("CustomerListViewModel: \(error)")
+        }
+    }
+    
+    func toggleArchive(_ customer: Customer) async {
+        
+        do{
+            switch selectedSegment {
+            case .active:
+                
+                try await service.archiveCustomer(id: customer.id)
+                
+                activeCustomers.removeAll{$0.id == customer.id}
+                var archivedCustomer = customer
+                archivedCustomer.isArchived = true
+                archivedCustomers.append(archivedCustomer)
+                archivedCustomers.sort {$0.companyName < $1.companyName}
+                
+            case .archived:
+                
+                try await service.unarchiveCustomer(id: customer.id)
+                
+                archivedCustomers.removeAll{$0.id == customer.id}
+                var activeCustomer = customer
+                activeCustomer.isArchived = false
+                activeCustomers.append(activeCustomer)
+                activeCustomers.sort {$0.companyName < $1.companyName}
+            }
+            
+            searchResults.removeAll { $0.id == customer.id }
+        }catch {
+            let action = selectedSegment == .active ? "archive" : "unarchive"
+            errorMessage = "Failed to \(action) customer"
+            print("CustomerListViewModel: \(error)")
+
         }
     }
     
